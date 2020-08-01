@@ -1,0 +1,24 @@
+﻿<Window x:Class="Win32APIBitmap.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Win32APIBitmap"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="TEST">
+                <MenuItem Header="TEST1" Click="MenuItem_Click"/>
+                <MenuItem Header="TEST2" Click="MenuItem_Click_1"/>
+                <MenuItem Header="TEST3" Click="MenuItem_Click_2"/>
+                <MenuItem Header="TEST4" Click="MenuItem_Click_3"/>
+                <MenuItem Header="TEST5" Click="MenuItem_Click_4"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Image x:Name="Img1" HorizontalAlignment="Left" Height="332" Margin="33,33,0,0" VerticalAlignment="Top" Width="715"/>
+
+        </Grid>
+    </DockPanel>
+</Window>

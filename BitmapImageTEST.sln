@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Win32APIBitmap", "Win32APIBitmap\Win32APIBitmap.csproj", "{A0D2E7A5-C63F-4389-A229-BC953237DD88}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0D2E7A5-C63F-4389-A229-BC953237DD88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D2E7A5-C63F-4389-A229-BC953237DD88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D2E7A5-C63F-4389-A229-BC953237DD88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D2E7A5-C63F-4389-A229-BC953237DD88}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5CB92C94-0DDF-4E8F-BCDC-B3D8C2DC5099}
+	EndGlobalSection
+EndGlobal
