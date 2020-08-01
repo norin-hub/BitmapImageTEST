@@ -228,7 +228,7 @@ namespace Win32APIBitmap
                 BITMAPFILEHEADER fhead = new BITMAPFILEHEADER();
                 fhead.bftype = 19778;
                 fhead.bfSize = (uint)(size + 54);
-                fhead.bfOffBits = 54;
+                fhead.bfOffBits = 54;//gary →  1078
 
                 byte[] buffhead = new byte[Marshal.SizeOf(fhead)];
                 IntPtr pfhead = Marshal.AllocCoTaskMem(Marshal.SizeOf(fhead));
@@ -242,7 +242,7 @@ namespace Win32APIBitmap
                 ihead.biWidth = src.PixelWidth;
                 ihead.biHeight = src.PixelHeight;
                 ihead.biPlanes = 1;
-                ihead.biBitCount = (ushort)src.Format.BitsPerPixel;
+                ihead.biBitCount = (ushort)src.Format.BitsPerPixel;//gray → 8
                 ihead.biSizeImage = (uint)size;
                 ihead.biXPelsPerMeter = (int)src.DpiX;
                 ihead.biYPelsPerMeter = (int)src.DpiY;
