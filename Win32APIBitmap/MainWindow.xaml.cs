@@ -164,9 +164,12 @@ namespace Win32APIBitmap
             Img1.Source = image;
         }
 
-        //FileStreamとBITMAPINFOHEADERを使ってDIB画像を直接読み込む
+        //FileStreamとBITMAPINFOHEADERを使ってDIB画像を直接読み込む(0.0120069)
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+
             string fname = @"D:\movie\壁紙\test.bmp";
             var fs = new FileStream(fname, FileMode.Open);
 
@@ -197,6 +200,9 @@ namespace Win32APIBitmap
                 PixelFormats.Bgr24, null, tmpptr, (int)iheader.biSizeImage, stride);
 
             Img1.Source = src;
+
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed.TotalSeconds.ToString());
         }
 
         //FileStreamとBITMAPINFOHEADERを使ってDIB画像を保存する(0.0111148)
@@ -268,6 +274,57 @@ namespace Win32APIBitmap
                 enc.Frames.Add(BitmapFrame.Create(src));
                 enc.Save(fs);
             }
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed.TotalSeconds.ToString());
+        }
+
+        //グレースケール画像をBITMAPINFOHEADERを使って読み込む
+        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
+        {
+            string fname = @"D:\movie\壁紙\test_gray.bmp";
+            var fs = new FileStream(fname, FileMode.Open);
+
+            var reader = new BinaryReader(fs);
+
+            byte[] buf = reader.ReadBytes((int)fs.Length);
+
+            reader.Dispose();
+
+            fs.Close();
+
+            IntPtr ptr = Marshal.AllocCoTaskMem(buf.Length);
+            Marshal.Copy(buf, 0, ptr, buf.Length);
+
+            IntPtr tmpptr = new IntPtr(ptr.ToInt32());
+
+            BITMAPFILEHEADER fheader = Marshal.PtrToStructure<BITMAPFILEHEADER>(tmpptr);
+
+            tmpptr = IntPtr.Add(tmpptr, Marshal.SizeOf(fheader));
+
+            BITMAPINFOHEADER iheader = Marshal.PtrToStructure<BITMAPINFOHEADER>(tmpptr);
+
+            //画像オフセットの位置がカラーと違うので注意
+            tmpptr = new IntPtr(ptr.ToInt32() + fheader.bfOffBits);
+
+            int stride = iheader.biWidth * (iheader.biBitCount / 8);
+            int size = stride * iheader.biHeight;
+
+            var src = BitmapSource.Create(iheader.biWidth, iheader.biHeight, 600, 600,
+                PixelFormats.Gray8, null, tmpptr, size, stride);
+
+            Img1.Source = src;
+        }
+
+        //BitmapImageで画像を読み込む(0.0239597)
+        private void MenuItem_Click_6(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+
+            string fname = @"D:\movie\壁紙\test.bmp";
+            BitmapImage img = new BitmapImage(new Uri(fname));
+            Img1.Source = img;
+
             sw.Stop();
             Console.WriteLine(sw.Elapsed.TotalSeconds.ToString());
         }
