@@ -16,6 +16,9 @@
                 <MenuItem Header="TEST5" Click="MenuItem_Click_4"/>
                 <MenuItem Header="TEST6" Click="MenuItem_Click_5"/>
                 <MenuItem Header="TEST7" Click="MenuItem_Click_6"/>
+                <MenuItem Header="TEST8" Click="MenuItem_Click_7"/>
+                <MenuItem Header="TEST9" Click="MenuItem_Click_8"/>
+                <MenuItem Header="TEST10" Click="MenuItem_Click_9"/>
             </MenuItem>
         </Menu>
         <Grid>
