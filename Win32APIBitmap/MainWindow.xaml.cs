@@ -130,15 +130,15 @@ namespace Win32APIBitmap
                 sw.Restart();
             }
 
-            public static void show()
+            public static void show(string msg = "")
             {
-                Console.WriteLine("{0:0.000}", sw.Elapsed.TotalSeconds);
+                Console.WriteLine("{0:0.000} {1}", sw.Elapsed.TotalSeconds,msg);
             }
 
-            public static void stop()
+            public static void stop(string msg = "")
             {
                 sw.Stop();
-                Console.WriteLine("{0:0.000}", sw.Elapsed.TotalSeconds);
+                Console.WriteLine("{0:0.000} {1}", sw.Elapsed.TotalSeconds,msg);
             }
         }
         #endregion
@@ -540,13 +540,13 @@ namespace Win32APIBitmap
             Marshal.StructureToPtr(ihead, gch.AddrOfPinnedObject(), false);
             gch.Free();
 
-            TM.show();
+            TM.show("1");
 
             byte[] buf = new byte[size];
 
             src.CopyPixels(buf, stride, 0);
 
-            TM.show();
+            TM.show("2");
 
             int size24 = ihead.biHeight * (ihead.biWidth * 3);
             byte[] wbuf = new byte[size24];
@@ -562,6 +562,7 @@ namespace Win32APIBitmap
                     wbuf[pos + 2] = buf[pos2 + 2];
                 }
             }
+            TM.show("3");
             using (var fs = new FileStream("test.bmp", FileMode.Create))
             {
                 fs.Write(fheadbuf, 0, fheadbuf.Length);
@@ -569,6 +570,76 @@ namespace Win32APIBitmap
                 fs.Write(wbuf, 0, wbuf.Length);
             }
 
+            TM.stop();
+        }
+
+        //TEST10 BITMAPINFOを使って32bit→24bitフォーマットに変換してさらに上下反転して書き込む(改良)(1.851)
+        private void MenuItem_Click_10(object sender, RoutedEventArgs e)
+        {
+            //BITMAPINFOHEADERの高さをマイナスにすることで簡単に反転して保存できる
+            //メモリ消費も減った
+
+            TM.start();
+
+            BitmapSource src = Img1.Source as BitmapSource;
+            int width = src.PixelWidth;
+            int height = src.PixelHeight;
+            int pxlsize = 4;
+            int stride = width * pxlsize;
+            int size = height * stride;
+
+            BITMAPFILEHEADER fhead = new BITMAPFILEHEADER();
+            fhead.bftype = 19778;
+            fhead.bfSize = (uint)(size + 54);
+            fhead.bfOffBits = 54;//gary →  1078
+            BITMAPINFOHEADER ihead = new BITMAPINFOHEADER();
+            ihead.biSize = 40;
+            ihead.biWidth = width;
+            ihead.biHeight = -height;
+            ihead.biPlanes = 1;
+            ihead.biBitCount = 24;//gray → 8
+            ihead.biSizeImage = (uint)size;
+            ihead.biXPelsPerMeter = 0;
+            ihead.biYPelsPerMeter = 0;
+
+            byte[] fheadbuf = new byte[Marshal.SizeOf(fhead)];
+            GCHandle gch = GCHandle.Alloc(fheadbuf, GCHandleType.Pinned);
+            Marshal.StructureToPtr(fhead, gch.AddrOfPinnedObject(), false);
+            gch.Free();
+
+            byte[] iheadbuf = new byte[Marshal.SizeOf(ihead)];
+            gch = GCHandle.Alloc(iheadbuf, GCHandleType.Pinned);
+            Marshal.StructureToPtr(ihead, gch.AddrOfPinnedObject(), false);
+            gch.Free();
+
+            TM.show("1");
+
+            byte[] buf = new byte[size];
+
+            src.CopyPixels(buf, stride, 0);
+
+            TM.show("2");
+
+            int pos, pos2;
+            for(int y = 0; y < height; y++)
+            {
+                for(int x = 0; x < width; x++)
+                {
+                    pos = y * (width * 3) + (x * 3);
+                    pos2 = y * (height * 4) + (x * 4);
+
+                    buf[pos + 0] = buf[pos2 + 0];
+                    buf[pos + 1] = buf[pos2 + 1];
+                    buf[pos + 2] = buf[pos2 + 2];
+                }
+            }
+            TM.show("3");
+            using (var fs = new FileStream("test.bmp", FileMode.Create))
+            {
+                fs.Write(fheadbuf, 0, fheadbuf.Length);
+                fs.Write(iheadbuf, 0, iheadbuf.Length);
+                fs.Write(buf, 0, src.PixelWidth * src.PixelHeight * 3);
+            }
             TM.stop();
         }
     }
