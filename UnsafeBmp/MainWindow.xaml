@@ -11,6 +11,7 @@
             <MenuItem Header="TEST">
                 <MenuItem Header="TEST1" Click="MenuItem_Click"/>
                 <MenuItem Header="TEST2" Click="MenuItem_Click_1"/>
+                <MenuItem Header="TEST3" Click="MenuItem_Click_2"/>
             </MenuItem>
         </Menu>
         <Grid>
